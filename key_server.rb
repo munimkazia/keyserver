@@ -37,26 +37,38 @@ class KeyServer
 				key = nil
 			end
 		end
-		key
+		return key
 	end
 
 	def refresh key
-		if Time.now.to_i - @keys[key][:keep_alive_stamp] < @ttl
+		if @keys[key] == nil
+			return false
+		elsif Time.now.to_i - @keys[key][:keep_alive_stamp] < @ttl
 			@keys[key][:keep_alive_stamp] = Time.now.to_i
+			return true
 		else
 			#key has expired already. delete it and move on
 			delete(key)
+			return false
 		end
 	end
 
 	def delete key
+		if @keys[key] == nil
+			return false
+		end
 		@keys.delete(key)
 		@free.delete(key)
+		return true
 	end
 
 	def release key
+		if @keys[key] == nil || @keys[key][:assigned_stamp] == 0
+			return false
+		end
 		@keys[key][:assigned_stamp] = 0
 		@free[key] = 1
+		return true
 	end
 
 	def cleanup 
@@ -68,18 +80,5 @@ class KeyServer
 				release(key)
 			end
 		end
-	end
-end
-
-if __FILE__ == $0
-	test = KeyServer.new
-	test.generate
-	#puts test.keys
-	puts test.get_free
-	puts test.get_free
-	puts test.get_free
-
-	test.keys.each do |key, hash|
-		puts hash[:keep_alive_stamp]
 	end
 end

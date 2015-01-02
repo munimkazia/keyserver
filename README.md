@@ -19,3 +19,39 @@ Apart from these endpoints, following rules should be enforced:
 R1. All blocked keys should get released automatically within 60 secs if E3 is not called.
 
 No endpoint call should result in an iteration of whole set of keys i.e. no endpoint request should be O(n). They should either be O(lg n) or O(1).
+
+Running the Solution
+--------------------
+`bundle install`
+`rackup -p 8080`
+
+Running tests
+-------------
+rspec test.rb
+
+API Endpoits
+------------
+
+* /   
+
+Just sends 'ok' as output if the server is running
+
+* /keys  
+
+Generates keys, and outputs in form of a json array
+
+* /key  
+
+Outputs a free key in json string format if available. Sends 404 response if not
+
+* /key/release/:id  
+
+Releases a key after its allocated to a client. Sends json true if successful, or false if key is invalid or not allocated
+
+* /key/delete/:id  
+
+Deletes a key. Sends json true if successful, or false if key is invalid
+
+* /key/refresh/:id  
+
+Updates the TTL of the key. If a key expires, it gets deleted
