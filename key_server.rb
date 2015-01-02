@@ -30,7 +30,7 @@ class KeyServer
 			@free[key] = 1
 		end
 		return @keys.keys
-    
+
 	end
 
   #Returns a free key as string. Returns nil if no key is available
@@ -80,6 +80,7 @@ class KeyServer
     if @keys[key] == nil
       return false
     end
+
     @keys.delete key
     @free.delete key
     return true
@@ -92,6 +93,7 @@ class KeyServer
     if @keys[key] == nil || @keys[key][:assigned_stamp] == 0
       return false
     end
+    
     @keys[key][:assigned_stamp] = 0
     @free[key] = 1
     return true

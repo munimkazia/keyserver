@@ -7,7 +7,6 @@ key_server = KeyServer.new
 Thread.new do
 
   while true do
-    #Every second, the cleanup task is used to free keys which have been used for more than 30 seconds
     sleep 1
     key_server.cleanup
   end
