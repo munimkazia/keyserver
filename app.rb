@@ -2,15 +2,16 @@ require 'sinatra'
 require 'json'
 require './key_server.rb'
 
-set :port, 8080
-
 key_server = KeyServer.new
 
 Thread.new do 
+
   while true do
-     sleep 1
-     key_server.cleanup
+    #Every second, the cleanup task is used to free keys which have been used for more than 30 seconds
+    sleep 1
+    key_server.cleanup
   end
+
 end
 
 get '/' do
@@ -18,7 +19,8 @@ get '/' do
 end
 
 get '/keys' do
-	keys = key_server.generate 10, 300
+  #Generate 10 keys, with 300 seconds TTL, and 30 second usage timeout
+	keys = key_server.generate 10, 300, 30
 	content_type :json
 	keys.to_json
 end
