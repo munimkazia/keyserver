@@ -4,7 +4,7 @@ class KeyServer
 	attr_reader :ttl
   attr_reader :timeout
 
-  def initialize 
+  def initialize
     @keys = { }
     @free = { }
   end
@@ -17,6 +17,7 @@ class KeyServer
     @timeout = key_timeout
 
     while @free.length < length do
+      #generates an 8 character random string
       key = (0...8).map { (65 + rand(26)).chr }.join
       if @keys[key] != nil
 				next #this key code is already in use. Try another
@@ -29,6 +30,7 @@ class KeyServer
 			@free[key] = 1
 		end
 		return @keys.keys
+    
 	end
 
   #Returns a free key as string. Returns nil if no key is available
@@ -44,13 +46,14 @@ class KeyServer
         break
 
       else
-        delete(key)
+        delete key
         key = nil
 
       end
 
     end
     return key
+
   end
 
   #Updates the ttl of the key. 
@@ -77,8 +80,8 @@ class KeyServer
     if @keys[key] == nil
       return false
     end
-    @keys.delete(key)
-    @free.delete(key)
+    @keys.delete key
+    @free.delete key
     return true
 
   end
@@ -100,11 +103,12 @@ class KeyServer
 
     @keys.each do |key, val|
       if Time.now.to_i - @keys[key][:keep_alive_stamp] >= @ttl
-        delete(key)
+        delete key
       elsif Time.now.to_i - @keys[key][:assigned_stamp] >= @timeout
-        release(key)
+        release key
       end
     end
+
   end
 
 end
