@@ -22,12 +22,13 @@ No endpoint call should result in an iteration of whole set of keys i.e. no endp
 
 Running the Solution
 --------------------
-`bundle install`
+`bundle install`   
+
 `rackup -p 8080`
 
 Running tests
 -------------
-rspec test.rb
+`rspec test.rb`
 
 API Endpoits
 ------------
