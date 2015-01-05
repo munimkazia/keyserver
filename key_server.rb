@@ -1,7 +1,7 @@
 class KeyServer
-	attr_reader :keys
-	attr_reader :free
-	attr_reader :ttl
+  attr_reader :keys
+  attr_reader :free
+  attr_reader :ttl
   attr_reader :timeout
 
   def initialize
@@ -20,18 +20,18 @@ class KeyServer
       #generates an 8 character random string
       key = (0...8).map { (65 + rand(26)).chr }.join
       if @keys[key] != nil
-				next #this key code is already in use. Try another
-			end
-			
+        next #this key code is already in use. Try another
+      end
+      
       @keys[key] = {
-				keep_alive_stamp: Time.now.to_i,
-				assigned_stamp: 0
-			}
-			@free[key] = 1
-		end
-		return @keys.keys
+        keep_alive_stamp: Time.now.to_i,
+        assigned_stamp: 0
+      }
+      @free[key] = 1
+    end
+    return @keys.keys
 
-	end
+  end
 
   #Returns a free key as string. Returns nil if no key is available
   def get
@@ -67,12 +67,12 @@ class KeyServer
       return true
 
     else
-			#key has expired already. delete it and move on
-			delete(key)
-			return false
-		end
+      #key has expired already. delete it and move on
+      delete(key)
+      return false
+    end
 
-	end
+  end
 
   #Deletes the key from the keystore. 
   def delete key
@@ -98,7 +98,7 @@ class KeyServer
     @free[key] = 1
     return true
 
- end
+  end
 
   #Cleanup task which goes through all the keys and releases/deletes them
   def cleanup 
